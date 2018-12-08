@@ -1,14 +1,113 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="refresh" content="0;url=http://www.brookline.k12.ma.us/devotion/sciencefair">
-        <script type="text/javascript">
-            window.location.href = "http://www.brookline.k12.ma.us/devotion/sciencefair"
-        </script>
-        <title>Page Redirection</title>
-    </head>
-    <body style="font-size: 120%">
-      If you are not redirected automatically, follow this <a href="http://www.brookline.k12.ma.us/devotion/sciencefair">link</a>
-    </body>
+---
+---
+<html>
+  <head>
+  {% include head.html %}
+
+    <script src="js/judge-signup.js"></script>
+    <title>Devo Craft Fair 2019</title>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="mt-5">Annual Crafts & Services Fair</h1>
+
+  <div class="row mt-3">
+    <div class="col-2"><em>When</em></div>
+    <div class="col-6">Wednesday, January 30, 2019<br/>
+      6:00pm-7:30pm<br/>
+      Exhibitors should arrive to set up at 5:30pm</div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-2"><em>Who</em></div>
+    <div class="col-6">All Coolidge Corner students K-8 are welcome</br>
+      to sell their creations and/or services</div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-2"><em>What</em></div>
+    <div class="col-6">Make unique crafts, delicious treats, or whatever you can think up.</br>
+      Offer nail polishing, hair styling, tattoos, games, card trading, face painting, and more!</div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-2"><em>How much</em></div>
+    <div class="col-6">Optional donation: $2.00 per crafter<br/>
+      To be collected at the door on the day of the fair.<br/>
+      All proceeds will be donated to the Food Pantry.</div>
+  </div>
+  <p class="mt-4">Registration deadline: Wednesday January 16</p>
+
+  <h3>Participation signup form</h3>
+  <form>
+  {% for i in (1..3) %}
+    <h5 class="mt-4">Student {{i}}</h5>
+    <div class="form-row">
+      <div class="col-6">
+	<input type="text" class="form-control" id="name{{i}}" placeholder="name">
+      </div>
+      <div class="col-3">
+	<input type="text" class="form-control" id="phone{{i}}" placeholder="phone">
+      </div>
+      <div class="col-3">
+	<select id="classroom{{i}}">
+	  <option value="undecided" selected>Classroom...</option>
+	  {% for teacher in site.data.classrooms %}
+	  <option value="{{ teacher }}">{{ teacher }}</option>{% endfor %}
+	</select>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="col-12">
+      <label class="checkbox-inline" for="needElectric">
+	<input type="checkbox" id="needElectric">Check here if you need an electrical outlet.</input>
+      </label>
+    </div>
+
+    <div class="col-12">
+      <label for="requests">Special requests</label>
+      <textarea id="requests"></textarea>
+    </div>
+
+    <div class="col-12">
+      <label for="requests">Special requests</label>
+      <textarea id="requests"></textarea>
+    </div>
+
+  </div>
+
+
+  <div class="container judging">
+    <div class="frame1">
+      <button id="form_submit_yes" type="submit" class="btn btn-primary">Yes, I'm interested</button>
+      <img id="optin_spinner" class="spinner" src="pix/spinner.gif">
+      <p style="margin-top: 4em">If you're not interested, and you wish to be removed from our mailing list, click here. Don't forget to give us your email address (above)!</P>
+      <button id="form_submit_no" type="submit" class="btn btn-warning">No, please remove me</button>
+      <img id="optout_spinner" class="spinner" src="pix/spinner.gif">
+    </div>
+
+    <div class="frame2">
+      <div class="success alert alert-success">
+	<span class="glyphicon glyphicon-ok"></span>
+	<P>Thanks for signing up!</P>
+	<button class="ok btn btn-default" role="button">OK</button>
+      </div>
+      <div class="remove alert alert-success">
+	<span class="glyphicon glyphicon-ok"></span>
+	<P>OK, we will remove you from our mailing list. Sorry for any inconvenience.</P>
+	<button class="ok btn btn-default" role="button">OK</button>
+      </div>
+      <div class="fail alert alert-warning">
+	<span class="glyphicon glyphicon-thumbs-down"></span>
+	<P>Oops, there was a problem. The reason is: <div class="reason"></div></P>
+	<button class="ok btn btn-default" role="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+</body>
 </html>
