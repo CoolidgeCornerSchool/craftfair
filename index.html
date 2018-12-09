@@ -32,7 +32,7 @@ title: Devo Craft Fair 2019
 
   <div class="row mt-3">
     <div class="col-2"><em>Who</em></div>
-    <div class="col-6">All Coolidge Corner students K-8 are welcome</br>
+    <div class="col-6">All Coolidge Corner students K-8 are welcome.</br>
       to sell their creations and/or services</div>
   </div>
 
@@ -72,10 +72,10 @@ title: Devo Craft Fair 2019
 	  <input type="text" class="form-control" id="phone{{i}}" placeholder="phone">
 	</div>
 	<div class="col-3">
-	  <select class="custom-select" id="classroom{{i}}">
-	    <option value="" selected>Classroom...</option>
-	    {% for teacher in site.data.classrooms %}
-	    <option value="{{ teacher }}">{{ teacher }}</option>{% endfor %}
+	  <select class="custom-select" id="grade{{i}}">
+	    <option value="" selected>Grade...</option>
+	    {% for grade in site.data.grades %}
+	    <option value="{{ grade }}">{{ grade }}</option>{% endfor %}
 	  </select>
 	</div>
       </div>

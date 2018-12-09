@@ -3,9 +3,9 @@ $(document).ready(init_page);
 var GOOGLE_URL = 'https://script.google.com/macros/s/AKfycbw0HdsoFMFoiKpBzcAXiPrS1u1XdjIXKmmdie8NDJAvgQqFUbGe/exec';
 
 var FIELDS = ['name1', 'name2', 'name3','phone1', 'phone2', 'phone3',
-		  'classroom1', 'classroom2', 'classroom3', 'description', 'requests']
+		  'grade1', 'grade2', 'grade3', 'description', 'requests']
 
-var REQUIRED_FIELDS = ['name1', 'phone1', 'classroom1', 'description'];
+var REQUIRED_FIELDS = ['name1', 'phone1', 'grade1', 'description'];
 
 function init_page(){
     $('.spinner').hide()
