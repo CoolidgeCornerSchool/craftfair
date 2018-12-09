@@ -1,3 +1,21 @@
+.header {
+    background-color: #ecc141;
+    border-radius: 3px;
+}
+.header h3 {
+    color: white;
+ }
+
+.origami-bee {
+    height: 6em;
+    position: relative;
+    top: 1em;
+}
+
+.strike {
+	text-decoration: line-through
+ }
+
 .register-logo {
     width: 130px;
     float: right;
