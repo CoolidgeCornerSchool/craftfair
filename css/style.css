@@ -12,6 +12,11 @@
     top: 1em;
 }
 
+.fa-plug {
+   color: #666;
+   margin-right: 1em;
+}
+
 .strike {
 	text-decoration: line-through
  }
