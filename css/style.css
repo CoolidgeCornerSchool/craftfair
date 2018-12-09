@@ -104,7 +104,7 @@
 
 /* judging signup form */
 
-.judging .frame2 {
+.modals {
   display: none
 }
 
@@ -117,5 +117,6 @@
 }
 
 .spinner {
-  display: none;
+    font-size: 400%;
+    color: #999;
 }

@@ -1,190 +1,122 @@
-$(document).ready(init_devo);
+$(document).ready(init_page);
 
-// Edit this URL to point to the script
+var GOOGLE_URL = 'https://script.google.com/macros/s/AKfycbw0HdsoFMFoiKpBzcAXiPrS1u1XdjIXKmmdie8NDJAvgQqFUbGe/exec';
 
-var GOOGLE_URL= 'https://script.google.com/macros/s/AKfycbyCQCcpJjUZ5RlkoCWfAf69C3OEGTiWJ3k58lnVUee-9wPFkUV8/exec';
+var FIELDS = ['name1', 'name2', 'name3','phone1', 'phone2', 'phone3',
+		  'classroom1', 'classroom2', 'classroom3', 'description', 'requests']
 
-function init_devo(){
-  TableFactory.install();
-  $('button#form_submit').click(on_submit);
-  $('button#addChild').click(on_addChild);
-  $('button#removeChild').click(on_removeChild);
+var REQUIRED_FIELDS = ['name1', 'phone1', 'classroom1', 'description'];
+
+function init_page(){
+    $('.spinner').hide()
+    $('button#signup').click(function(){return on_submit_signup();});
+    $('.modals .btn.ok').click(signup_restore);
 }
 
-// ----------------------------------------
-// Click on submit button, post to Google Docs spreadsheet
-
-function on_submit(e){
-  var data = get_values();
-  data['prefix']='callback';
-  console.log(data);
-  $.ajax({url: GOOGLE_URL,
-	  data: data,
-	  jsonp: 'callback',
-	  dataType: 'jsonp',
-	  success: callback
-	 });
-  return false;    // e.preventDefault
+// If you click "OK" in error/success alert boxes, dismiss them.
+function signup_restore(){
+    $('.modals').hide(200);
+    $('.is-invalid').removeClass('is-invalid');
+    return false;
 }
 
-function callback(result){
-  console.log('call success', result);
-  var encoded = encodeURIComponent(JSON.stringify(result));
-  window.location.href = 'thanks.html?r='+encoded;
-}
 
-function get_fields(){
-  return $.map($('form input, form select'), function(x, i){ return $(x).attr('id'); });
-}
-
-function get_values(){
-  var fields = get_fields();
-  var data = {};
-  for (var i in fields){
-    var key = fields[i];
-    var selector = key;
-    if ($('#'+key).attr('type') == 'checkbox'){
-      selector = key+':checked';
+// returns object with form values as {key:value}
+// If any required fields are missing, the returned object contains only those instead,
+// along with {"error":"incomplete}
+function gather_data(){
+    var result = {};
+    var valid = true;
+    result['needElectric'] = $('#needElectric').is(":checked")
+    for (var i in FIELDS){
+	var field = FIELDS[i];
+	var value = $('form #'+field).val();
+	var is_required = REQUIRED_FIELDS.includes(field);
+	var is_missing = (value == '');
+	if ( is_required && is_missing) {
+	    if (valid) {
+		result = {"error": "incomplete"};
+		valid = false;
+	    }
+	}
+	if (valid){
+	    if (is_missing) {
+		value = '-';
+	    }
+	    result[field] = value;
+	} else if (is_required && is_missing) {
+	    result[field] = value;
+	}
     }
-    var value = $('form #'+selector).val();
-    if (!$('form #'+selector).is(':visible')){
-      value = '';
-    }
-    if (value != '' && value != undefined){
-      data[key] = value;
-    }
-  }
-  return data;
-}
-
-// ----------------------------------------
-// Click on add/remove child
-
-var MAX_CHILDREN = 4;
-
-function on_addChild(e){
-  var count = $('.row.child:visible').length;
-  if (count < MAX_CHILDREN){
-    $('#names .row.child:nth-child('+ (count+2) +')').css('display','block');
-  }
-  updateUpDownButtons();
-  return false;
-}
-
-function on_removeChild(e){
-  var count = $('.row.child:visible').length;
-  if (count > 1){
-    $('#names .row.child:nth-child('+ (count+1) +')').css('display','none');
-  }
-  updateUpDownButtons();
-  return false;
-}
-
-function updateUpDownButtons(){
-  var count = $('.row.child:visible').length;
-  if (count == 1){
-    $('button#removeChild').prop('disabled', true);
-  } else {
-    $('button#removeChild').prop('disabled', false);
-  }
-  if (count == MAX_CHILDREN){
-    $('button#addChild').prop('disabled', true);
-  } else {
-    $('button#addChild').prop('disabled', false);
-  }
-}
-
-
-
-// ----------------------------------------
-// Create the table of form inputs to capture student names
-
-var TableFactory = {
-
-  install : function(){
-    $('#project_title').after(this.make_table());
-    updateUpDownButtons();
-  },
-
-  // returns a complete table of form inputs with one child per row
-  // columns are [name, class, phone, email]
-  make_table : function(){
-    var result = $('<div/>', {'class': 'form_group', 'id':'names'})
-      .append(
-	  this.make_header(),
-	  this.make_row(1).css('display', 'block'),
-	  this.make_row(2),
-	  this.make_row(3),
-	  this.make_row(4),
-	  this.make_updown_buttons()
-      );
     return result;
-  },
+}
 
-  make_one_header : function(col_class,name){
-    return $('<div/>', {'class': col_class})
-      .append($('<p/>',{'class':'form-control-static'}).text(name));
-    },
+    
 
-  make_header : function(){
-    return $('<div/>', {'class': 'row names_header'}).append(
-      this.make_one_header('col-md-4', 'Participating students'),
-      this.make_one_header('col-md-1', 'grade'),
-      this.make_one_header('col-md-2', 'phone'),
-      this.make_one_header('col-md-3', 'email (parent or child)'),
-      this.make_one_header('col-md-2', 'school')
-    );
-  },
+// If you click "add me", post form value to the cloud (google spreadsheet)
+function on_submit_signup(){
+    console.log('on_submit_signup');
+    var data = gather_data();
+    // First, validate the email address
+    if (data['error'] == 'incomplete'){
+	var filtered = Object.keys(data).filter(function(value, index, arr){
+	    return value != 'error';
+	});
+	$(filtered).each(function(i, field){
+	    $('#'+field).addClass('is-invalid');
+	});
 
-  // plus and minus buttons
-  make_updown_buttons : function(){
-    return  $('<div/>', {'class': 'row form-inline'}).append(
-      $('<div/>', {'class':'btn-group updown col-md-4'}).append(
-	$('<button/>', {'class':'btn btn-xs btn-default', 'aria-label':"Add child", 'id':'addChild'})
-	  .append($('<span/>', {'class':''}).text('+')),
-	$('<button/>', {'class':'btn btn-xs btn-default', 'aria-label':"Remove child", 'id':'removeChild'})
-	  .append($('<span/>', {'class':''}).html('&ndash;')))
-    );
-  },
+	errMsg = "Some required fields are missing: " + filtered.join(', ');
 
-  make_row :function(N){
-    return $('<div/>', {'class': 'row child'})
-      .css('display','none')
-      .append(
-	this.make_input('col-md-4','name'+N, 'name'+N, 'text', 'Student ' + N + '\'s first and last name'),
-	this.make_select('col-md-1','grade'+N, 'grade'+N, this.grades),
-	this.make_input('col-md-2','phone'+N, 'phone'+N, 'tel', 'phone'),
-	this.make_input('col-md-3','email'+N, 'email'+N, 'email', 'email'),
-	this.make_select('col-md-2','school'+N, 'school'+N, this.schools)
-      );
-  },
+	callback({result: errMsg});
+	return false;
+    } else {
+	// Address is good, go POST it
+	$('.spinner').show();
+	$.ajax({url: GOOGLE_URL,
+		data: data,
+		jsonpCallback: 'callback',
+		error: on_fail,
+		dataType: 'jsonp'
+	       });
+	return false;    // e.preventDefault
+    }
+}
 
-  make_input : function(col_class, for_id, label, type, placeholder){
-    return $('<div/>', {'class': 'form_group ' + col_class})
-          .append(
-             $('<label/>', {'class': 'sr-only', 'for': for_id}).text(label),
-	     $('<input/>', {'class': 'form-control',
-			    'type': type,
-			    'id':for_id,
-			    'placeholder':placeholder})
-	  );
-  },
+function on_fail(jqXHR, textStatus, errorThrown){
+    console.log('fail', jqXHR, textStatus, errorThrown);
+    show_alert({result:"Could not post data to server."});
+}
 
-  grades : ['K', 1, 2, 3, 4, 5, 6, 7, 8, 'other'],
+// Called when AJAX returns success or failure
+// result_struct is either
+//  { result: "success" } or
+//  { result: <error string> }
+function callback(result_struct){
+    $('.spinner').hide();
+    show_alert(result_struct);
+    return false;
+}
 
-  schools : ['Lower Devotion', 'Upper Devotion', 'Baker', 'Driscoll',
-	     'Heath', 'Pierce', 'Lawrence', 'Lincoln', 'Runkle', 'Other'],
+function show_alert(result_struct){
+    $('.spinner').hide();
+    $('.modals').show();
+    var result = result_struct.result;
+    if (result == 'success'){
+	$('.modals .fail').hide();
+	$('.modals .success').show();
+    } else {
+	$('.modals .success').hide();
+	$('.modals .fail').show();
+	$('.modals .fail .reason').html(result);
+    }
+    return false;
+}
 
-  make_select : function(col_class, for_id, label, options){
-    var select = $('<select/>', {'class': 'form-control',
-				 'id': for_id});
-    $.each(options, function(i,v) {
-	     select.append($('<option/>',{value: v}).text(v));
-	   });
-    return $('<div/>', {'class': 'form_group ' + col_class})
-          .append(
-             $('<label/>', {'class': 'sr-only', 'for': for_id}).text(label),
-	     select
-	  );
-   }
-};
+// returns true if email is valid, else returns false.
+function validateEmail(email) {
+  var re = /(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+  return re.test(email);
+}
+
+

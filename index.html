@@ -1,12 +1,8 @@
 ---
+title: Devo Craft Fair 2019
 ---
 <html>
-  <head>
   {% include head.html %}
-
-    <script src="js/judge-signup.js"></script>
-    <title>Devo Craft Fair 2019</title>
-</head>
 <body>
 
   <div class="container">
@@ -74,7 +70,7 @@
 	</div>
 	<div class="col-3">
 	  <select class="custom-select" id="classroom{{i}}">
-	    <option value="undecided" selected>Classroom...</option>
+	    <option value="" selected>Classroom...</option>
 	    {% for teacher in site.data.classrooms %}
 	    <option value="{{ teacher }}">{{ teacher }}</option>{% endfor %}
 	  </select>
@@ -97,35 +93,30 @@
       <label class="form-check-label" for="needElectric"><i class="fa fa-plug"></i>Check here if you will need an electrical outlet.</label>
     </div>
 
+    <i class="mt-5 fa fa-cog fa-spin spinner"></i>
+
+ <div class="container">
+   <div class="modals mt-5">
+     <div class="success alert alert-success">
+       <span class="fa fa-check"></span>
+       <P>We've received your application form. Thanks for signing up!</P>
+       <button class="ok btn btn-default" role="button">OK</button>
+     </div>
+
+     <div class="fail alert alert-warning">
+       <span class="fa fa-thumbs-down"></span>
+       <P>Oops, there was a problem. The reason is: <div class="reason"></div></P>
+       <button class="ok btn btn-default" role="button">OK</button>
+     </div>
+   </div>
+ </div>
+
+
+    <button id="signup" type="submit" class="btn btn-primary mt-5">Sign up</button>
+
   </div>
-
-
-  <div class="container judging">
-    <div class="frame1 mb-5">
-      <button id="form_submit_yes" type="submit" class="btn btn-primary">Sign up</button>
-      <img id="spinner" class="spinner" src="pix/spinner.gif">
-    </div>
-
-    <div class="frame2">
-      <div class="success alert alert-success">
-	<span class="glyphicon glyphicon-ok"></span>
-	<P>Thanks for signing up!</P>
-	<button class="ok btn btn-default" role="button">OK</button>
-      </div>
-      <div class="remove alert alert-success">
-	<span class="glyphicon glyphicon-ok"></span>
-	<P>OK, we will remove you from our mailing list. Sorry for any inconvenience.</P>
-	<button class="ok btn btn-default" role="button">OK</button>
-      </div>
-      <div class="fail alert alert-warning">
-	<span class="glyphicon glyphicon-thumbs-down"></span>
-	<P>Oops, there was a problem. The reason is: <div class="reason"></div></P>
-	<button class="ok btn btn-default" role="button">OK</button>
-      </div>
-    </div>
-  </div>
-
 </form>
+
 
 </body>
 </html>
