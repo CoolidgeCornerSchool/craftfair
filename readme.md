@@ -1,10 +1,12 @@
-# Devo Science Fair
+# Coolidge Corner Craft Fair
 
-View this site at [http://sciencefair.devotionschool.org](http://sciencefair.devotionschool.org)
+This site was forked from the [Devo Science Fair](https://github.com/CoolidgeCornerSchool/sciencefair) repo.
+This readme probably has some cut-and-paste errors referring to science fair content.
 
-The Science Fair site has
-  * info about the science fair
-  * a registration form to sign up for the science fair
+View this site at [https://coolidgecornerschool.github.io/craftfair](https://coolidgecornerschool.github.io/craftfair)
+
+The Craft Fair site has
+  * a registration form to sign up for the craft fair
   * a spreadsheet to hold all the form data from people who sign up
 
 ### Copying or updating this code
@@ -13,33 +15,25 @@ You are welcome to make a copy of this code to run a similar site in
 the future, or somewhere else. It's a good example of how to capture
 data from web form and save it securely in a web spreadsheet.
 
-This source code is posted on [github](https://github.com/DevotionSchool/sciencefair).
+This source code is posted on [github](https://github.com/CoolidgeCornerSchool/craftfair).
 
-You can [view it live](http://devotionschool.github.io/sciencefair/)
-thanks to a free service called [Github pages](http://pages.github.com). All of the static (html/css/javascript) files in the `gh-pages` branch on github are available live at the project's [github pages url](http://devotionschool.github.io/sciencefair/).
-
-### Other forms
-You can find older Science Fair registration forms here:
-    https://devosciencefair.wufoo.com/forms/devo-science-fair-2015-registration-form/
+You can [view it live](http://coolidgecornerschool.github.io/craftfair/)
+thanks to a free service called [Github pages](http://pages.github.com). All of the static (html/css/javascript) files in the `gh-pages` branch on github are available live at the project's [github pages url](http://coolidgecornerschool.github.io/craftfair/).
 
 ## How this works
 
-The Devo Science Fair site has three parts:
+The Craft Fair site has two parts:
  * the front end: the pretty web pages, including the sign up form. This is hosted for free on [Github pages](http://pages.github.com).
- * the back end: a Google Docs spreadsheet (with a [web script](https://github.com/DevotionSchool/sciencefair/blob/gh-pages/Code.gs)) that stores all the registrations. This is also hosted for free, by Google.
- * the Town site: These are the official Devo web pages, hosted for us at [brookline.k12.ma.us](http://brookline.k12.ma.us) by the Town of Brookline.
+ * the back end: a Google Docs spreadsheet (with a [web script](https://github.com/CoolidgeCornerSchool/craftfair/blob/gh-pages/Code.gs)) that stores all the registrations. This is also hosted for free, by Google.
 
 When the user clicks 'Submit', the form (front end) posts data to Google Docs (back end).
 
 Here are the **front end** files:
 
- * index.html - the home page. This currently redirects to the info page at `http://brookline.k12.ma.us`
- * register.html - the sign up form
- * info.html - draft content for the town info page. Not intended for public access.
- * thanks.html - displays confirmation for signing up
+ * index.html - info and signup form
+ * tips.md - some tips
  * style.css - the css
  * script.js - posts the form to Google Sheets
- * thanks.js - display confirmation
 
 For the front end, we use a visual framework called [Twitter
 Bootstrap](http://getbootstrap.com), which makes the pages look nice
@@ -61,7 +55,7 @@ server of your choosing. The url will be something you configure with
 your hosting provider.
 
 Our site is hosted on [Github pages](http://pages.github.com), which is configured
-to be at [http://sciencefair.devotionschool.org](http://sciencefair.devotionschool.org).
+to be at [http://coolidgecornerschool.github.io/craftfair](http://coolidgecornerschool.github.io/craftfair).
 
 Github pages uses the `CNAME` file, which contains the preferred hostname.
 

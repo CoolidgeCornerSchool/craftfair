@@ -1,7 +1,6 @@
 ---
 layout: default_markdown
 ---
-<a class="mt-5" href="." class="btn btn-success goback-btn"><i class="fa fa-hand-o-left"></i>back to Signup form</a>  
 
 # Craft Fair: Tips for Success  
 

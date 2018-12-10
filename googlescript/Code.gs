@@ -15,7 +15,7 @@ Usage:
 
 */
 
-var RESPONSES_DOC_ID = '1QTRYH2-EXAMPLE-DUMMY-CODE-2wauckv4C8b61Y';
+var RESPONSES_DOC_ID = '15WGkLFus3gkYm4ilou6LPJ77oODzi_mbvYfKdBzXtM0';
 var SHEET_NAME = 'Sheet1';
 
 function doGet(e){
